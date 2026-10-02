@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kruskal's MST Visualizer</title>
+  <meta name="description"
+    content="Interactive step-by-step visualizer for Kruskal's Minimum Spanning Tree algorithm. Build a graph, watch the algorithm run edge by edge.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div id="fatal" class="banner error" hidden>
+    Could not load <code>kruskal.js</code>. Make sure it exists in this directory and the page is served via a local
+    server (e.g. <code>python -m http.server</code>).
+  </div>
+
+  <header>
+    <center>
+      <h1>Network Cable Optimization</h1>
+      <p>Kruskal's Minimum Spanning Tree </p>
+    </center>
+  </header>
+
+  <main>
+    <!-- Left: graph building controls -->
+    <aside class="panel" id="controls">
+      <h2>Build Graph</h2>
+
+      <button id="addCity">＋ Add City</button>
+      <p class="hint">Or double-click the canvas. Drag cities to reposition.</p>
+
+      <h3>Add Connection</h3>
+      <div class="row">
+        <select id="selU" aria-label="First city"></select>
+        <select id="selV" aria-label="Second city"></select>
+      </div>
+      <input id="weight" type="number" min="1" max="999" step="1" placeholder="Cable cost (1–999)">
+      <button id="addEdge">＋ Add Connection</button>
+
+      <div class="row">
+        <button id="loadSample" class="secondary">Load Sample</button>
+        <button id="clear" class="secondary">Clear</button>
+      </div>
+      <p id="msg" class="msg" role="status"></p>
+
+      <h3>Step Through</h3>
+      <div class="row">
+        <button id="prev" class="secondary">◀ Prev</button>
+        <button id="next">Next ▶</button>
+      </div>
+      <div class="row">
+        <button id="play" class="secondary">▶ Auto-play</button>
+        <button id="reset" class="secondary">↺ Reset</button>
+      </div>
+    </aside>
+
+    <!-- Centre: stats + graph -->
+    <section id="stage">
+      <div class="stats">
+        <div><span id="sV">0</span>Cities</div>
+        <div><span id="sE">0</span>Connections</div>
+        <div><span id="sSel">0</span>Selected</div>
+        <div><span id="sCost">0</span>MST Cost</div>
+        <div class="wide"><span id="sStatus">Idle</span>Status</div>
+      </div>
+
+      <svg id="graph" viewBox="0 0 640 420" role="img" aria-label="Graph of cities and cable connections"></svg>
+
+      <div class="legend">
+        <i class="k pending"></i>Not examined
+        <i class="k current"></i>Being examined
+        <i class="k accepted"></i>Selected (MST)
+        <i class="k rejected"></i>Rejected (cycle)
+      </div>
+
+      <div id="verdict" class="banner" hidden></div>
+    </section>
+
+    <!-- Right: explanation + edge list -->
+    <aside class="panel" id="side">
+      <h2>Explanation</h2>
+      <p id="explain" class="explain">Add a graph or load the sample, then press Next.</p>
+
+      <h3>Edges — sorted by weight</h3>
+      <ol id="sorted" class="sorted"></ol>
+
+      <h3>MST Edges</h3>
+      <p id="mstList" class="mono">none</p>
+    </aside>
+  </main>
+
+  <section class="notes">
+    <h2>Quick Reference</h2>
+    <div class="cols">
+      <p><b>Kruskal's algorithm</b> builds an MST by repeatedly taking the cheapest remaining edge that does not form a
+        cycle.</p>
+      <p><b>Greedy strategy:</b> always take the locally cheapest safe edge. For MSTs this is provably globally optimal
+        (cut property).</p>
+      <p><b>Minimum spanning tree:</b> V-1 edges that connect all V vertices with minimum total weight and no cycles.
+      </p>
+      <p><b>Disjoint Set Union:</b> Find(x) returns a set's root; if Find(u) = Find(v), edge u-v would create a cycle.
+        Union merges two sets.</p>
+
+      <p><b>Complexity:</b> sorting costs O(E log E). DSU loop costs O(E · α(V)) ≈ constant. Total: <b>O(E log E)</b>.
+      </p>
+
+
+    </div>
+  </section>
+
+  <script src="kruskal.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
